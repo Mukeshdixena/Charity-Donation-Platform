@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walcom Premium Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../config.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            /* color: white; */
+            cursor: pointer;
+            margin: 5px 0;
+            color: black;
+            background-color: #eab676;
+        }
+
+        #membershipDiv button {
+            background-color: #28a745;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        #totalAmountHeader {
+            color: #007bff;
+        }
+
+        #welcomeDiv {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <button onclick="logoutUser()" style="background: #dc3545;">Logout</button>
+
+        <div id="membershipDiv">
+            <button onclick="paymentPage()">Upgrade to Premium</button>
+        </div>
+
+        <div id="welcomeDiv" style="display: none;">
+            <h2>Welcome to Walcom Premium Membership!</h2>
+            <p>Enjoy unlimited expense tracking, detailed analytics, and priority support.</p>
+            <button id="showButton" onclick="showLeaderBoad()">Show Leader Boad</button>
+            <button id="downloadExpence" onclick="downloadExpence()">Download Expence</button>
+
+            <h3 id="LeaderBoad" style="display: none;">Leader Boad</h3>
+            <ol id="LeaderBoadList"></ol>
+            <h3>Download History</h3>
+            <ul id="DownloadList"></ul>
+        </div>
+
+        <form id="myForm">
+            <label for="description">Description:</label>
+            <input type="text" id="description" placeholder="Enter expense description" required>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" required>
+
+            <label for="category">Category:</label>
+            <select id="category" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Bills">Bills</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <button type="submit" style="background: #007bff;">Add Expense</button>
+        </form>
+
+        <h3 id="totalAmountHeader">Total Amount: ₹0</h3>
+        <h3>Expense History</h3>
+        <ul id="detailsList"></ul>
+    </div>
+    <script src="ExpenceTracker.js"></script>
+</body>
+
+</html>
