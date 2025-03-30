@@ -58,7 +58,7 @@ async function loadCharities() {
 
             const donateButton = document.createElement('button');
             donateButton.textContent = 'Donate Now';
-            donateButton.onclick = () => handleDonate(index);
+            donateButton.onclick = () => handleDonate(charity);
             card.appendChild(donateButton);
 
             charityList.appendChild(card);
@@ -98,9 +98,11 @@ async function addCharity() {
     }
 }
 
-function handleDonate(index) {
-    alert(`Thank you for choosing to donate!`);
+function handleDonate(charity) {
+    localStorage.setItem('selectedCharity', JSON.stringify(charity));
+    window.location.href = '../Donation/donation.html';
 }
+
 
 document.getElementById('create-charity-btn').addEventListener('click', () => {
     document.getElementById('charity-modal').style.display = 'flex';
@@ -111,3 +113,31 @@ function closeModal() {
 }
 
 window.onload = loadCharities;
+
+
+
+(async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get("orderId");
+
+    if (orderId) {
+        console.log(orderId);
+        await fetchPaymentStatus(orderId);
+    }
+})();
+
+async function fetchPaymentStatus(orderId) {
+    try {
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/payment/paymentStatus/${orderId}`);
+        console.log(response);
+        let status = response.data.data[0]?.payment_status;
+
+        if (status === 'SUCCESS') {
+            const token = localStorage.getItem('token');
+            await axios.patch(`${CONFIG.API_BASE_URL}/api/postDonation`, { amountDonated, charityOrgId }, { headers: { "Authorization": token } });
+            console.log("success");
+        }
+    } catch (error) {
+        console.error("Error fetching payment status:", error);
+    }
+}

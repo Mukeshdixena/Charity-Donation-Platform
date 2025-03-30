@@ -22,6 +22,9 @@
             align-items: center;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../config.js"></script>
 </head>
 
 <body>
@@ -73,68 +76,16 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="../config.js"></script>
-    <script>
-        const token = localStorage.getItem('token');
-        const profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
 
-        // Get user profile (GET request using async/await)
-        async function getUserProfile() {
-            try {
-                console.log("working");
-                console.log(token);
-                const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getUserById`,
-                    { headers: { "Authorization": token } }
-                );  // Replace with your API
-                const user = response.data;
-                console.log(user)
-                displayProfile(user);
-            } catch (error) {
-                console.error("Error fetching user profile:", error);
-            }
-        }
 
-        // Display user profile
-        function displayProfile(user) {
-            console.log(user);
-            document.getElementById('user-name').innerText = user.username;
-            document.getElementById('user-email').innerText = user.email;
-            document.getElementById('user-contact').innerText = user.contact;
-        }
+    <div class="container">
+        <h2>Your Donation History</h2>
+        <div id="donation-history"></div>
+    </div>
 
-        // Open modal to edit profile
-        document.getElementById('edit-profile-btn').addEventListener('click', () => {
-            populateForm();
-            profileModal.show();
-        });
 
-        // Populate form with current profile data
-        function populateForm() {
-            document.getElementById('editName').value = document.getElementById('user-name').innerText;
-            document.getElementById('editEmail').value = document.getElementById('user-email').innerText;
-            document.getElementById('editContact').value = document.getElementById('user-contact').innerText;
-        }
 
-        // Save updated profile (PUT request)
-        document.getElementById('save-profile-btn').addEventListener('click', async () => {
-            const updatedProfile = {
-                username: document.getElementById('editName').value,
-                email: document.getElementById('editEmail').value,
-                contact: document.getElementById('editContact').value
-            };
-
-            try {
-                await axios.patch(`${CONFIG.API_BASE_URL}/api/editUser`, updatedProfile, { headers: { "Authorization": token } });
-                profileModal.hide();
-                getUserProfile();
-            } catch (error) {
-                console.error("Error updating user profile:", error);
-            }
-        });
-        getUserProfile();
-    </script>
+    <script src="profile.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate to Charity</title>
+    <style>
+        .donation-form {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .donation-form h3 {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../config.js"></script>
+</head>
+
+<body>
+    <div class="donation-form">
+        <h3 id="charity-name"></h3>
+        <p id="charity-description"></p>
+        <p>Required Amount: <span id="required-amount"></span></p>
+
+        <form>
+            <label for="donation-amount">Donation Amount:</label>
+            <input type="number" id="donation-amount" name="donation-amount" min="1" required>
+            <br><br>
+            <button type="button" onclick="submitDonation()">Pay Now</button>
+        </form>
+    </div>
+
+    <script src="./donation.js"></script>
+</body>
+
+</html>
