@@ -76,7 +76,7 @@ async function fetchPaymentStatus(orderId) {
         const charityOrgId = JSON.parse(localStorage.getItem('selectedCharity')).id;
 
         if (status === 'SUCCESS') {
-            const token = localStorage.getItem('token');
+
             try {
                 const paymentId = orderId;
                 await axios.post(`${CONFIG.API_BASE_URL}/api/postDonation`, { paymentId, amountDonated, charityOrgId }, { headers: { "Authorization": token } });
@@ -94,3 +94,45 @@ async function fetchPaymentStatus(orderId) {
         console.error("Error fetching payment status:", error);
     }
 }
+
+
+function updateDonationHistory(donations) {
+    const donationHistoryDiv = document.getElementById('donation-history');
+    donationHistoryDiv.innerHTML = ''; // Clear existing content
+
+    if (donations.length === 0) {
+        donationHistoryDiv.innerHTML = '<p>No donations found.</p>';
+        return;
+    }
+
+    donations.forEach(donation => {
+        const donationItem = document.createElement('div');
+        donationItem.classList.add('donation-item');
+
+        const donationAmount = document.createElement('p');
+        donationAmount.innerHTML = `<span class="donation-amount">$${donation.amountDonated}</span> donated to Charity ID: ${donation.charityOrgId}`;
+        donationItem.appendChild(donationAmount);
+
+        const donationDate = document.createElement('p');
+        donationDate.textContent = `Date: ${new Date(donation.createdAt).toLocaleDateString()}`;
+        donationItem.appendChild(donationDate);
+
+        donationHistoryDiv.appendChild(donationItem);
+    });
+}
+
+async function fetchDonationHistory() {
+    try {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } }); // Adjust the URL as needed
+        if (!response.ok) {
+            throw new Error('Failed to fetch donation history');
+        }
+        const donations = await response.json();
+        updateDonationHistory(donations);
+    } catch (error) {
+        console.error(error);
+        document.getElementById('donation-history').innerHTML = '<p>Error loading donation history.</p>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchDonationHistory);
