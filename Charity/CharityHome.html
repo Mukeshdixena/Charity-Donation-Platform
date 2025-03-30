@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Donation App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em 0;
+            font-size: 1.5em;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            text-align: center;
+        }
+
+        .admin-link {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            font-size: 1em;
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #333;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+        }
+
+        .admin-link:hover {
+            background-color: #555;
+        }
+
+        main {
+            padding: 2em;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .charity-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .charity-card {
+            background-color: white;
+            padding: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .charity-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .charity-card button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75em 1.5em;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .charity-card button:hover {
+            background-color: #45a049;
+        }
+
+        .create-charity-btn {
+            margin: 1.5em 0;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.75em 1.5em;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .create-charity-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2em;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 0.5em;
+            margin-bottom: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75em 1.5em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #45a049;
+        }
+
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 0.5em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../config.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <h1>Charity Donation App</h1>
+        <a href="Profile.html" class="admin-link">Profile </a>
+    </header>
+
+    <main>
+        <button class="create-charity-btn" id="create-charity-btn">Create New Charity</button>
+
+        <h2>Select a Charity to Donate</h2>
+        <div class="charity-list" id="charity-list">
+            <!-- Charity organizations will be dynamically added here -->
+        </div>
+
+        <!-- Modal for creating new charity -->
+        <div class="modal" id="charity-modal">
+            <div class="modal-content">
+                <h2>Create New Charity</h2>
+
+                <label for="charity-name">Charity Name</label>
+                <input type="text" id="charity-name" placeholder="Enter charity name">
+
+                <label for="charity-desc">Description</label>
+                <input type="text" id="charity-desc" placeholder="Enter charity description">
+
+                <label for="requiredAmount">Required Amount</label>
+                <input type="number" id="requiredAmount" placeholder="Enter charity required amount">
+
+                <label for="category">Category</label>
+                <select id="category">
+                    <option value="">Select Category</option>
+                    <option value="education">Education</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="environment">Environment</option>
+                    <option value="poverty">Poverty</option>
+                    <option value="animalWelfare">Animal Welfare</option>
+                </select>
+
+                <label for="location">Location</label>
+                <select id="location">
+                    <option value="">Select Location</option>
+                    <option value="delhi">Delhi</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="kolkata">Kolkata</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="pune">Pune</option>
+                    <option value="ahmedabad">Ahmedabad</option>
+                    <option value="jaipur">Jaipur</option>
+                    <option value="lucknow">Lucknow</option>
+                </select>
+
+
+                <button onclick="addCharity()">Add Charity</button>
+                <button class="close-btn" onclick="closeModal()">Cancel</button>
+            </div>
+
+        </div>
+    </main>
+    <script src="./charity.js"></script>
+</body>
+
+</html>

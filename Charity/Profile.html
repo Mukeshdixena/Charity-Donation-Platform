@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .profile-container {
+            margin: 50px auto;
+            max-width: 600px;
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h2>User Profile</h2>
+                <button class="btn btn-primary" id="edit-profile-btn">Edit Profile</button>
+            </div>
+
+            <div id="profile-details" class="mt-4">
+                <!-- User details will be loaded here dynamically -->
+                <p><strong>Name:</strong> <span id="user-name"></span></p>
+                <p><strong>Email:</strong> <span id="user-email"></span></p>
+                <p><strong>Contact:</strong> <span id="user-contact"></span></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Editing Profile -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profile-form">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="editContact" class="form-label">Contact</label>
+                            <input type="text" class="form-control" id="editContact" required />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-profile-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../config.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
+
+        // Get user profile (GET request using async/await)
+        async function getUserProfile() {
+            try {
+                console.log("working");
+                console.log(token);
+                const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getUserById`,
+                    { headers: { "Authorization": token } }
+                );  // Replace with your API
+                const user = response.data;
+                console.log(user)
+                displayProfile(user);
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+            }
+        }
+
+        // Display user profile
+        function displayProfile(user) {
+            console.log(user);
+            document.getElementById('user-name').innerText = user.username;
+            document.getElementById('user-email').innerText = user.email;
+            document.getElementById('user-contact').innerText = user.contact;
+        }
+
+        // Open modal to edit profile
+        document.getElementById('edit-profile-btn').addEventListener('click', () => {
+            populateForm();
+            profileModal.show();
+        });
+
+        // Populate form with current profile data
+        function populateForm() {
+            document.getElementById('editName').value = document.getElementById('user-name').innerText;
+            document.getElementById('editEmail').value = document.getElementById('user-email').innerText;
+            document.getElementById('editContact').value = document.getElementById('user-contact').innerText;
+        }
+
+        // Save updated profile (PUT request)
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+            const updatedProfile = {
+                username: document.getElementById('editName').value,
+                email: document.getElementById('editEmail').value,
+                contact: document.getElementById('editContact').value
+            };
+
+            try {
+                await axios.patch(`${CONFIG.API_BASE_URL}/api/editUser`, updatedProfile, { headers: { "Authorization": token } });
+                profileModal.hide();
+                getUserProfile();
+            } catch (error) {
+                console.error("Error updating user profile:", error);
+            }
+        });
+        getUserProfile();
+    </script>
+</body>
+
+</html>

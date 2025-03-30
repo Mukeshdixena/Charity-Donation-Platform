@@ -15,7 +15,7 @@ async function signin() {
 
     if (response.data.success) {
         localStorage.setItem("token", response.data.token);
-        window.location.href = '../ExpenceTracker/ExpenceTracker.html';
+        window.location.href = '../Charity/CharityHome.html';
     } else {
 
         alert(response.data.message);
