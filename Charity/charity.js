@@ -1,4 +1,27 @@
 
+
+function filterCharities() {
+    const categoryFilter = document.getElementById("filter-category").value;
+    const locationFilter = document.getElementById("filter-location").value;
+
+    const charityList = document.querySelectorAll(".charity-card");
+
+    charityList.forEach(card => {
+        const charityCategory = card.getAttribute("data-category");
+        const charityLocation = card.getAttribute("data-location");
+
+        const categoryMatch = categoryFilter === "" || charityCategory === categoryFilter;
+        const locationMatch = locationFilter === "" || charityLocation === locationFilter;
+
+        if (categoryMatch && locationMatch) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+
 async function loadCharities() {
     try {
         const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgs`);
@@ -9,6 +32,9 @@ async function loadCharities() {
         charities.forEach((charity, index) => {
             const card = document.createElement('div');
             card.classList.add('charity-card');
+
+            card.setAttribute('data-category', charity.category);
+            card.setAttribute('data-location', charity.location);
 
             const charityName = document.createElement('h3');
             charityName.textContent = "Name: " + charity.name;

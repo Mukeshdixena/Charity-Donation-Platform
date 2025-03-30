@@ -184,6 +184,30 @@
         <button class="create-charity-btn" id="create-charity-btn">Create New Charity</button>
 
         <h2>Select a Charity to Donate</h2>
+        <div class="filters">
+            <select id="filter-category" onchange="filterCharities()">
+                <option value="">Filter by Category</option>
+                <option value="education">Education</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="environment">Environment</option>
+                <option value="poverty">Poverty</option>
+                <option value="animalWelfare">Animal Welfare</option>
+            </select>
+
+            <select id="filter-location" onchange="filterCharities()">
+                <option value="">Filter by Location</option>
+                <option value="delhi">Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="chennai">Chennai</option>
+                <option value="kolkata">Kolkata</option>
+                <option value="hyderabad">Hyderabad</option>
+                <option value="pune">Pune</option>
+                <option value="ahmedabad">Ahmedabad</option>
+                <option value="jaipur">Jaipur</option>
+                <option value="lucknow">Lucknow</option>
+            </select>
+        </div>
         <div class="charity-list" id="charity-list">
             <!-- Charity organizations will be dynamically added here -->
         </div>
