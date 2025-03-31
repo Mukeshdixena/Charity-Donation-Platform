@@ -30,6 +30,9 @@ async function loadCharities() {
         charityList.innerHTML = '';
 
         charities.forEach((charity, index) => {
+            if (!charity.isVerified) {
+                return;
+            }
             const card = document.createElement('div');
             card.classList.add('charity-card');
 

@@ -10,6 +10,11 @@ async function getUserProfile() {
             { headers: { "Authorization": token } }
         );
         const user = response.data;
+        if (user.isAdmin) {
+            document.querySelectorAll('.admin').forEach(element => {
+                element.style.display = 'block';
+            });
+        }
         console.log(user)
         displayProfile(user);
     } catch (error) {
@@ -76,8 +81,16 @@ async function fetchPaymentStatus(orderId) {
                 const paymentId = orderId;
                 await axios.post(`${CONFIG.API_BASE_URL}/api/postDonation`, { paymentId, amountDonated, charityOrgId }, { headers: { "Authorization": token } });
 
-                window.location.href = '../Charity/Profile.html';
+                const response = await axios.post(`${CONFIG.API_BASE_URL}/donation/confirmation`,
+                    {
+                        orderId, amountDonated, charityOrgId
+                    },
+                    {
+                        headers: { "Authorization": token }
+                    });
 
+                console.log(response);
+                window.location.href = '../Charity/Profile.html';
 
             } catch (error) {
 
@@ -118,7 +131,7 @@ function updateDonationHistory(donations) {
 
 async function fetchDonationHistory() {
     try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } }); // Adjust the URL as needed
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } });
         if (!response.ok) {
             throw new Error('Failed to fetch donation history');
         }
@@ -126,7 +139,6 @@ async function fetchDonationHistory() {
         updateDonationHistory(donations);
     } catch (error) {
         console.error(error);
-        document.getElementById('donation-history').innerHTML = '<p>Error loading donation history.</p>';
     }
 }
 
@@ -148,4 +160,45 @@ async function downloadDonationReport() {
     } catch (error) {
         console.error("Error fetching expense file:", error);
     }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Replace this with your actual API endpoint
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgs`);
+        const charities = response.data;
+        console.log(charities);
+
+        const tableBody = document.getElementById("charity-list-body");
+        let k = 1;
+        charities.forEach((charity, index) => {
+
+            if (charity.isVerified) {
+                return;
+            }
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${k++}</td>
+                <td>${charity.name}</td>
+                <td>${charity.description}</td>
+                <td>$${charity.requiredAmount.toLocaleString()}</td>
+                <td>
+                     <button class="btn btn-primary btn-sm" onclick="verify('${charity.id}', '${charity.name}')">
+                        verify
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error("Error fetching charity data:", error);
+    }
+});
+async function verify(charityOrgId, charityName) {
+    console.log(`verify to: ${charityName} (ID: ${charityOrgId})`);
+
+    const response = await axios.post(`${CONFIG.API_BASE_URL}/api/postCharityOrgVerified/${charityOrgId}`);
+    console.log(response);
+
 }

@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signin Page</title>
+    <title>Signup Page</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./config.js"></script>
+    <script src="../config.js"></script>
 
     <style>
         body {
@@ -18,7 +18,7 @@
             background-color: #f4f4f4;
         }
 
-        .signin-container {
+        .signup-container {
             background: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -27,11 +27,11 @@
             text-align: center;
         }
 
-        .signin-container h2 {
+        .signup-container h2 {
             text-align: center;
         }
 
-        .signin-container input {
+        .signup-container input {
             width: 92%;
             padding: 10px;
             margin: 10px 0;
@@ -39,7 +39,7 @@
             border-radius: 5px;
         }
 
-        .signin-container button {
+        .signup-container button {
             width: 100%;
             padding: 10px;
             background: #007bff;
@@ -49,7 +49,7 @@
             cursor: pointer;
         }
 
-        .signin-container button:hover {
+        .signup-container button:hover {
             background: #0056b3;
         }
 
@@ -67,17 +67,18 @@
 </head>
 
 <body>
-    <div class="signin-container">
-        <h2>Sign In</h2>
+    <div class="signup-container">
+        <h2>Signup</h2>
+        <input type="text" id="hostkey" placeholder="HostKey" required>
+        <input type="text" id="username" placeholder="Username" required>
         <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="contact" placeholder="contact" required>
         <input type="password" id="password" placeholder="Password" required>
-        <button onclick="signin()">login</button>
-        <a href="./Signup/Signup.html" class="login-link">don't have an account? Signup here</a>
-        <a href="./Login/forgetPass.html" class="login-link">Forget Password</a>
-        <a href="./Login/adminLogin.html" class="login-link">Admin Login</a>
+        <button onclick="signup()">Signup As Admin</button>
+        <a href="../index.html" class="login-link">Already have an account? Login</a>
     </div>
 
-    <script src="./Login/signin.js"></script>
+    <script src="signupAdmin.js"></script>
 </body>
 
 </html>
