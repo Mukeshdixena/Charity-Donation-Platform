@@ -1,5 +1,5 @@
 
-
+const token = localStorage.getItem('token');
 function filterCharities() {
     const categoryFilter = document.getElementById("filter-category").value;
     const locationFilter = document.getElementById("filter-location").value;
@@ -45,11 +45,11 @@ async function loadCharities() {
             card.appendChild(charityRequiredAmount);
 
             const category = document.createElement('p');
-            category.textContent = "category: " + charity.category;
+            category.textContent = "Category: " + charity.category;
             card.appendChild(category);
 
             const location = document.createElement('p');
-            location.textContent = "location: " + charity.location;
+            location.textContent = "Location: " + charity.location;
             card.appendChild(location);
 
             const charityDesc = document.createElement('p');
@@ -58,8 +58,15 @@ async function loadCharities() {
 
             const donateButton = document.createElement('button');
             donateButton.textContent = 'Donate Now';
-            donateButton.onclick = () => handleDonate(charity);
+            donateButton.onclick = (event) => {
+                event.stopPropagation(); // Prevent card click event from being triggered
+                handleDonate(charity);
+            };
             card.appendChild(donateButton);
+
+            card.addEventListener('click', () => {
+                handleCardClick(charity.id); // Pass the charity ID for detailed view
+            });
 
             charityList.appendChild(card);
         });
@@ -68,6 +75,10 @@ async function loadCharities() {
     }
 }
 
+function handleCardClick(charityId) {
+    // Assuming the detailed view page is at '/charity-detail.html'
+    window.location.href = `/Charity/charity-detail.html?id=${charityId}`;
+}
 async function addCharity() {
     const charityName = document.getElementById('charity-name').value;
     const charityDesc = document.getElementById('charity-desc').value;
@@ -116,28 +127,43 @@ window.onload = loadCharities;
 
 
 
-(async function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get("orderId");
+function updateDonationHistory(donations) {
+    const donationHistoryDiv = document.getElementById('donation-history');
+    donationHistoryDiv.innerHTML = ''; // Clear existing content
 
-    if (orderId) {
-        console.log(orderId);
-        await fetchPaymentStatus(orderId);
+    if (donations.length === 0) {
+        donationHistoryDiv.innerHTML = '<p>No donations found.</p>';
+        return;
     }
-})();
 
-async function fetchPaymentStatus(orderId) {
+    donations.forEach(donation => {
+        const donationItem = document.createElement('div');
+        donationItem.classList.add('donation-item');
+
+        const donationAmount = document.createElement('p');
+        donationAmount.innerHTML = `<span class="donation-amount">$${donation.amountDonated}</span> donated to Charity ID: ${donation.charityOrgId}  by User ID:  ${donation.userId}`;
+        donationItem.appendChild(donationAmount);
+
+        const donationDate = document.createElement('p');
+        donationDate.textContent = `Date: ${new Date(donation.createdAt).toLocaleDateString()}`;
+        donationItem.appendChild(donationDate);
+
+        donationHistoryDiv.appendChild(donationItem);
+    });
+}
+
+async function fetchDonationHistory() {
     try {
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/payment/paymentStatus/${orderId}`);
-        console.log(response);
-        let status = response.data.data[0]?.payment_status;
-
-        if (status === 'SUCCESS') {
-            const token = localStorage.getItem('token');
-            await axios.patch(`${CONFIG.API_BASE_URL}/api/postDonation`, { amountDonated, charityOrgId }, { headers: { "Authorization": token } });
-            console.log("success");
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonations`, { headers: { "Authorization": token } }); // Adjust the URL as needed
+        if (!response.ok) {
+            throw new Error('Failed to fetch donation history');
         }
+        const donations = await response.json();
+        updateDonationHistory(donations);
     } catch (error) {
-        console.error("Error fetching payment status:", error);
+        console.error(error);
+        document.getElementById('donation-history').innerHTML = '<p>Error loading donation history.</p>';
     }
 }
+
+document.addEventListener('DOMContentLoaded', fetchDonationHistory);

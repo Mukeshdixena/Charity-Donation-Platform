@@ -168,6 +168,31 @@
         .close-btn:hover {
             background-color: #d32f2f;
         }
+
+        .donation-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            align-items: center;
+        }
+
+        .donation-amount {
+            font-weight: bold;
+        }
+
+
+
+        .container {
+
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            /* text-align: center; */
+            /* Optional: Center text inside the container */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../config.js"></script>
@@ -258,6 +283,10 @@
 
         </div>
     </main>
+    <div class="container">
+        <h2> Donation History</h2>
+        <div id="donation-history"></div>
+    </div>
     <script src="./charity.js"></script>
 </body>
 

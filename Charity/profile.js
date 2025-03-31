@@ -81,7 +81,7 @@ async function fetchPaymentStatus(orderId) {
                 const paymentId = orderId;
                 await axios.post(`${CONFIG.API_BASE_URL}/api/postDonation`, { paymentId, amountDonated, charityOrgId }, { headers: { "Authorization": token } });
 
-                // window.location.href = '../Charity/Profile.html';
+                window.location.href = '../Charity/Profile.html';
 
 
             } catch (error) {
@@ -136,3 +136,21 @@ async function fetchDonationHistory() {
 }
 
 document.addEventListener('DOMContentLoaded', fetchDonationHistory);
+
+async function downloadDonationReport() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getDonationFile`, {
+            headers: { "Authorization": token }
+        });
+
+        if (response.data && response.data.fileUrl) {
+            window.open(response.data.fileUrl, "_blank"); // Open file in a new tab
+        } else {
+            console.error("File URL not found in response:", response);
+        }
+        await fetchDownloadList();
+    } catch (error) {
+        console.error("Error fetching expense file:", error);
+    }
+}
