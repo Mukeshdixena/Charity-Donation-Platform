@@ -1,19 +1,15 @@
 const token = localStorage.getItem('token');
-// Function to get the charity ID from the URL
 function getCharityId() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
 }
 
-// Function to fetch charity details using the ID
 async function fetchCharityDetails(charityId) {
     try {
-        // Assuming the API endpoint for fetching charity details by ID
         const charityOrgId = charityId;
         const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgById/${charityOrgId}`);
         const charity = response.data;
 
-        // Populate the charity detail section
         const charityDetail = document.getElementById('charity-detail');
         charityDetail.innerHTML = `
             <h1>${charity.name}</h1>
@@ -29,7 +25,6 @@ async function fetchCharityDetails(charityId) {
     }
 }
 
-// On page load, get charity ID and fetch details
 const charityId = getCharityId();
 if (charityId) {
     fetchCharityDetails(charityId);
@@ -40,8 +35,7 @@ if (charityId) {
 
 function updateDonationHistory(donations) {
     const donationHistoryDiv = document.getElementById('donation-history');
-    donationHistoryDiv.innerHTML = ''; // Clear existing content
-
+    donationHistoryDiv.innerHTML = '';
     if (donations.length === 0) {
         donationHistoryDiv.innerHTML = '<p>No donations found.</p>';
         return;
@@ -65,7 +59,7 @@ function updateDonationHistory(donations) {
 
 async function fetchDonationHistory() {
     try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } }); // Adjust the URL as needed
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } });
         if (!response.ok) {
             throw new Error('Failed to fetch donation history');
         }

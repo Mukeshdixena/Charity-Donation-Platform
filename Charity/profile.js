@@ -2,14 +2,13 @@
 const token = localStorage.getItem('token');
 const profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
 
-// Get user profile (GET request using async/await)
 async function getUserProfile() {
     try {
         console.log("working");
         console.log(token);
         const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getUserById`,
             { headers: { "Authorization": token } }
-        );  // Replace with your API
+        );
         const user = response.data;
         console.log(user)
         displayProfile(user);
@@ -18,7 +17,6 @@ async function getUserProfile() {
     }
 }
 
-// Display user profile
 function displayProfile(user) {
     console.log(user);
     document.getElementById('user-name').innerText = user.username;
@@ -26,20 +24,17 @@ function displayProfile(user) {
     document.getElementById('user-contact').innerText = user.contact;
 }
 
-// Open modal to edit profile
 document.getElementById('edit-profile-btn').addEventListener('click', () => {
     populateForm();
     profileModal.show();
 });
 
-// Populate form with current profile data
 function populateForm() {
     document.getElementById('editName').value = document.getElementById('user-name').innerText;
     document.getElementById('editEmail').value = document.getElementById('user-email').innerText;
     document.getElementById('editContact').value = document.getElementById('user-contact').innerText;
 }
 
-// Save updated profile (PUT request)
 document.getElementById('save-profile-btn').addEventListener('click', async () => {
     const updatedProfile = {
         username: document.getElementById('editName').value,
@@ -145,7 +140,7 @@ async function downloadDonationReport() {
         });
 
         if (response.data && response.data.fileUrl) {
-            window.open(response.data.fileUrl, "_blank"); // Open file in a new tab
+            window.open(response.data.fileUrl, "_blank");
         } else {
             console.error("File URL not found in response:", response);
         }

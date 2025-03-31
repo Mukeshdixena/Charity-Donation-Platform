@@ -59,13 +59,13 @@ async function loadCharities() {
             const donateButton = document.createElement('button');
             donateButton.textContent = 'Donate Now';
             donateButton.onclick = (event) => {
-                event.stopPropagation(); // Prevent card click event from being triggered
+                event.stopPropagation();
                 handleDonate(charity);
             };
             card.appendChild(donateButton);
 
             card.addEventListener('click', () => {
-                handleCardClick(charity.id); // Pass the charity ID for detailed view
+                handleCardClick(charity.id);
             });
 
             charityList.appendChild(card);
@@ -76,7 +76,6 @@ async function loadCharities() {
 }
 
 function handleCardClick(charityId) {
-    // Assuming the detailed view page is at '/charity-detail.html'
     window.location.href = `/Charity/charity-detail.html?id=${charityId}`;
 }
 async function addCharity() {
@@ -129,7 +128,7 @@ window.onload = loadCharities;
 
 function updateDonationHistory(donations) {
     const donationHistoryDiv = document.getElementById('donation-history');
-    donationHistoryDiv.innerHTML = ''; // Clear existing content
+    donationHistoryDiv.innerHTML = '';
 
     if (donations.length === 0) {
         donationHistoryDiv.innerHTML = '<p>No donations found.</p>';
