@@ -199,6 +199,7 @@ async function verify(charityOrgId, charityName) {
     console.log(`verify to: ${charityName} (ID: ${charityOrgId})`);
 
     const response = await axios.post(`${CONFIG.API_BASE_URL}/api/postCharityOrgVerified/${charityOrgId}`);
-    console.log(response);
+
+    location.reload();
 
 }
