@@ -169,3 +169,39 @@ async function fetchDonationHistory() {
 }
 
 document.addEventListener('DOMContentLoaded', fetchDonationHistory);
+
+function searchDonations() {
+    const searchValue = document.getElementById("search-donation").value.toLowerCase();
+    const charities = document.querySelectorAll(".charity-card");
+
+    const url = new URL(window.location);
+    if (searchValue) {
+        url.searchParams.set("search", searchValue);
+    } else {
+        url.searchParams.delete("search");
+    }
+    window.history.replaceState({}, "", url);
+
+    charities.forEach(card => {
+        const charityName = card.querySelector("h3").textContent.toLowerCase();
+        if (charityName.includes(searchValue) || searchValue == "") {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+function applySearchFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchValue = urlParams.get("search");
+    if (searchValue) {
+        document.getElementById("search-donation").value = searchValue;
+        searchDonations();
+    }
+}
+
+window.onload = async function () {
+    await loadCharities();
+    applySearchFromURL();
+};

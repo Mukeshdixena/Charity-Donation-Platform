@@ -17,7 +17,8 @@ async function signin() {
 
     if (response.data.success) {
         localStorage.setItem("token", response.data.token);
-        window.location.href = '../Charity/CharityHome.html';
+        console.log("go to the admin page");
+        window.location.href = '../AdminProfile/Profile.html';
     } else {
 
         alert(response.data.message);

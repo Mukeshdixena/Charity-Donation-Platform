@@ -26,7 +26,7 @@
             text-align: center;
         }
 
-        .admin-link {
+        .profile-link {
             position: absolute;
             top: 50%;
             right: 20px;
@@ -39,7 +39,24 @@
             border-radius: 5px;
         }
 
-        .admin-link:hover {
+        .profile-link:hover {
+            background-color: #555;
+        }
+
+        .logout-link {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            font-size: 1em;
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #333;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+        }
+
+        .logout-link:hover {
             background-color: #555;
         }
 
@@ -191,6 +208,64 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .filters input,
+        .filters select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .filters input {
+            width: 250px;
+            border: 1px solid #ddd;
+        }
+
+        .filters select {
+            width: 200px;
+        }
+
+        .filters input:focus,
+        .filters select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .filters input:hover,
+        .filters select:hover {
+            border-color: #45a049;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .filters {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filters input,
+            .filters select {
+                width: 100%;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../config.js"></script>
@@ -199,9 +274,9 @@
 
 <body>
     <header>
-        <a href="../index.html">logout</a>
+        <a href="../index.html" class="logout-link">logout</a>
+        <a href="Profile.html" class="profile-link">Profile </a>
         <h1>Charity Donation App</h1>
-        <a href="Profile.html" class="admin-link">Profile </a>
     </header>
 
     <main>
@@ -209,6 +284,8 @@
 
         <h2>Select a Charity to Donate</h2>
         <div class="filters">
+            <input type="text" id="search-donation" placeholder="Search by Charity Name" oninput="searchDonations()">
+
             <select id="filter-category" onchange="filterCharities()">
                 <option value="">Filter by Category</option>
                 <option value="education">Education</option>
@@ -232,6 +309,7 @@
                 <option value="lucknow">Lucknow</option>
             </select>
         </div>
+
         <div class="charity-list" id="charity-list">
         </div>
 
