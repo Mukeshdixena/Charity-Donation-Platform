@@ -172,13 +172,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const unverifiedTableBody = document.getElementById("charity-unverified-list-body");
         const verifiedTableBody = document.getElementById("charity-verified-list-body");
         let k = 1;
+        let l = 1;
         charities.forEach((charity, index) => {
 
             if (charity.isVerified) {
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${k++}</td>
+                    <td>${l++}</td>
                     <td>${charity.name}</td>
                     <td>${charity.description}</td>
                     <td>$${charity.requiredAmount.toLocaleString()}</td>
