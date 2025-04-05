@@ -10,7 +10,7 @@ async function signup() {
     }
 
     try {
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getUser`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/user`);
 
         const emailExists = response.data.some(({ email }) => email === currEmail);
 
@@ -19,7 +19,7 @@ async function signup() {
             return;
         }
 
-        await axios.post(`${CONFIG.API_BASE_URL}/api/postUser`, { username, email: currEmail, contact, password });
+        await axios.post(`${CONFIG.API_BASE_URL}/user`, { username, email: currEmail, contact, password });
         window.location.href = '../index.html';
 
     } catch (error) {

@@ -6,7 +6,7 @@ async function getUserProfile() {
     try {
         console.log("working");
         console.log(token);
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getUserById`,
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/userById`,
             { headers: { "Authorization": token } }
         );
         const user = response.data;
@@ -48,7 +48,7 @@ document.getElementById('save-profile-btn').addEventListener('click', async () =
     };
 
     try {
-        await axios.patch(`${CONFIG.API_BASE_URL}/api/editUser`, updatedProfile, { headers: { "Authorization": token } });
+        await axios.patch(`${CONFIG.API_BASE_URL}/editUser`, updatedProfile, { headers: { "Authorization": token } });
         profileModal.hide();
         getUserProfile();
     } catch (error) {
@@ -79,9 +79,9 @@ async function fetchPaymentStatus(orderId) {
 
             try {
                 const paymentId = orderId;
-                await axios.post(`${CONFIG.API_BASE_URL}/api/postDonation`, { paymentId, amountDonated, charityOrgId }, { headers: { "Authorization": token } });
+                await axios.post(`${CONFIG.API_BASE_URL}/aonation`, { paymentId, amountDonated, charityOrgId }, { headers: { "Authorization": token } });
 
-                const response = await axios.post(`${CONFIG.API_BASE_URL}/donation/confirmation`,
+                const response = await axios.post(`${CONFIG.API_BASE_URL}/confirmation`,
                     {
                         orderId, amountDonated, charityOrgId
                     },
@@ -131,7 +131,7 @@ function updateDonationHistory(donations) {
 
 async function fetchDonationHistory() {
     try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } });
+        const response = await fetch(`${CONFIG.API_BASE_URL}/donationByUser`, { headers: { "Authorization": token } });
         if (!response.ok) {
             throw new Error('Failed to fetch donation history');
         }
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', fetchDonationHistory);
 async function downloadDonationReport() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getDonationFile`, {
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/donationFile`, {
             headers: { "Authorization": token }
         });
 
@@ -165,7 +165,7 @@ async function downloadDonationReport() {
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         // Replace this with your actual API endpoint
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgs`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/charityOrgs`);
         const charities = response.data;
         console.log(charities);
 
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function verify(charityOrgId, charityName) {
     console.log(`verify to: ${charityName} (ID: ${charityOrgId})`);
 
-    const response = await axios.post(`${CONFIG.API_BASE_URL}/api/postCharityOrgVerified/${charityOrgId}`);
+    const response = await axios.post(`${CONFIG.API_BASE_URL}/charityOrgVerified/${charityOrgId}`);
 
     location.reload();
 

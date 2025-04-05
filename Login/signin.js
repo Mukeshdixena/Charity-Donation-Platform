@@ -7,7 +7,7 @@ async function signin() {
         return;
     }
 
-    const response = await axios.post(`${CONFIG.API_BASE_URL}/api/signin`, {
+    const response = await axios.post(`${CONFIG.API_BASE_URL}/signin`, {
         email: currEmail,
         password: currPassword
     });

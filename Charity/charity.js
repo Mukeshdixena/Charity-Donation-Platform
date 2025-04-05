@@ -24,7 +24,7 @@ function filterCharities() {
 
 async function loadCharities() {
     try {
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgs`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/charityOrgs`);
         const charities = response.data;
         const charityList = document.getElementById('charity-list');
         charityList.innerHTML = '';
@@ -102,7 +102,7 @@ async function addCharity() {
     };
 
     try {
-        const response = await axios.post(`${CONFIG.API_BASE_URL}/api/postCharityOrg`, charityData);
+        const response = await axios.post(`${CONFIG.API_BASE_URL}/charityOrg`, charityData);
         console.log('Charity added successfully:', response.data);
         loadCharities();
         closeModal();
@@ -156,7 +156,7 @@ function updateDonationHistory(donations) {
 
 async function fetchDonationHistory() {
     try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonations`, { headers: { "Authorization": token } }); // Adjust the URL as needed
+        const response = await fetch(`${CONFIG.API_BASE_URL}/donations`, { headers: { "Authorization": token } }); // Adjust the URL as needed
         if (!response.ok) {
             throw new Error('Failed to fetch donation history');
         }

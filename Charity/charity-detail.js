@@ -7,7 +7,7 @@ function getCharityId() {
 async function fetchCharityDetails(charityId) {
     try {
         const charityOrgId = charityId;
-        const response = await axios.get(`${CONFIG.API_BASE_URL}/api/getCharityOrgById/${charityOrgId}`);
+        const response = await axios.get(`${CONFIG.API_BASE_URL}/charityOrgById/${charityOrgId}`);
         const charity = response.data;
 
         const charityDetail = document.getElementById('charity-detail');
@@ -59,7 +59,7 @@ function updateDonationHistory(donations) {
 
 async function fetchDonationHistory() {
     try {
-        const response = await fetch(`${CONFIG.API_BASE_URL}/api/getDonationByUser`, { headers: { "Authorization": token } });
+        const response = await fetch(`${CONFIG.API_BASE_URL}/donationByUser`, { headers: { "Authorization": token } });
         if (!response.ok) {
             throw new Error('Failed to fetch donation history');
         }
